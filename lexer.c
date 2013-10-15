@@ -1,9 +1,9 @@
 %{
-#include "tokens.h"
+#include "interval.tab.h"
 %}
 
 %%
-[-+]?[0-9]*[\.\,]?[0-9]+([eE][-+]?[0-9]+)?		{ return REALNUMBER; }
+[0-9]*[\.\,]?[0-9]+([eE][-+]?[0-9]+)?			{ sscanf (yytext, "%lf", &yylval); return NUM; }
 "+inf"							{ return PLUSINF; }
 "-inf"							{ return MINUSINF; }
 "U"							{ return UNIF; }
@@ -25,10 +25,10 @@
 
 "**"							{ return POWER; }
 
-\+							{ return PLUS; }
-\-							{ return MINUS; }
-\*							{ return MULTIPLY; }
-\\							{ return DIVIDE; }
+"+"							{ return PLUS; }
+"-"							{ return MINUS; }
+"*"							{ return MULTIPLY; }
+"/"							{ return DIVIDE; }
 "("							{ return OKRSKOB; }
 ")"							{ return ZKRSKOB; }
 "["							{ return OKVSKOB; }

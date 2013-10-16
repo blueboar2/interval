@@ -4,13 +4,12 @@
 
 #include <glib.h>
 #include <gmp.h>
-#include <mpfr.h>
 
     char *InputString1;
     char *InputString2;
 
-    double yylval;
-    double result;
+    mpf_t yylval;
+    mpf_t result;
 
 char* inputString (unsigned int realloc_size)
 {
@@ -55,7 +54,7 @@ int main () {
 
     yy_scan_string (InputString1);
     yyparse();
-    printf ("%f\n", result);
+    gmp_printf ("%F\n", result);
 
     // here is some interesting code
 

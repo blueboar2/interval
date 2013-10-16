@@ -3,7 +3,7 @@
 %}
 
 %%
-[0-9]*[\.\,]?[0-9]+([eE][-+]?[0-9]+)?			{ sscanf (yytext, "%lf", &yylval); return NUM; }
+[0-9]*[\.\,]?[0-9]+([eE][-+]?[0-9]+)?			{ mpf_init2(yylval,10000); gmp_sscanf (yytext, "%F", &yylval); return NUM; }
 "+inf"							{ return PLUSINF; }
 "-inf"							{ return MINUSINF; }
 "U"							{ return UNIF; }

@@ -25,7 +25,7 @@
 %% /* The grammar follows.  */
 
 exp:
-  NUM                   { $$ = yylval;  result = $$;      }
+  NUM                   { mpf_init2($$, 10000); mpf_set($$,yylval); mpf_set(result,$$); }
 //| exp PLUS exp          { $$ = $1 + $3;  result = $$;     }
 //| exp MINUS exp         { $$ = $1 - $3;  result = $$;     }
 //| exp MULTIPLY exp      { $$ = $1 * $3;  result = $$;     }

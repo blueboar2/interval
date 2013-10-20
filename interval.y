@@ -1,16 +1,16 @@
 /* Infix notation calculator.  */
 
 %{
-  #include <math.h>
   #include <stdio.h>
-  #include <mpfr.h>
   extern char *yytext;
-  extern mpfr_t result;
   int yylex (void);
   #define YYSTYPE int
-
-  mpfr_t stack[100];
-  mpfr_ptr sp = stack[0];
+  #include <mpfr.h>
+  #include <glib.h>
+  #include <assert.h>
+  extern __mpfr_struct result, temp;
+  extern GArray *stack;
+  extern gint stacksize;
 
 %}
 
@@ -31,30 +31,133 @@
 %% /* The grammar follows.  */
 
 exp:
-  NUM                      { sp++;
-			    mpfr_init (sp);
-			    mpfr_set_str (sp, yytext, 10, 0); }
-| exp PLUS exp             { sp--; mpfr_add (sp, sp, sp+1, 0);  mpfr_set (result, sp, 0); }
-| exp MINUS exp            { sp--; mpfr_sub (sp, sp, sp+1, 0);  mpfr_set (result, sp, 0); }
-| exp MULTIPLY exp         { sp--; mpfr_mul (sp, sp, sp+1, 0);  mpfr_set (result, sp, 0); }
-| exp DIVIDE exp           { sp--; mpfr_div (sp, sp, sp+1, 0);  mpfr_set (result, sp, 0); }
-| MINUS exp  %prec NEG     { mpfr_neg (sp, sp, 0);  mpfr_set (result, sp, 0); }
-| exp POWER exp            { sp--; mpfr_pow (sp, sp, sp+1, 0);  mpfr_set (result, sp, 0); }
+  NUM                      {
+			    mpfr_init (&temp);
+			    mpfr_set_str (&temp, yytext, 10, 0);
+			    g_array_append_val (stack, temp);
+			    stacksize++;
+			    }
+| exp PLUS exp             { 
+			    temp = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_add (&result, &result, &temp, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
+| exp MINUS exp            {
+			    temp = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_sub (&result, &result, &temp, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
+| exp MULTIPLY exp          {
+			    temp = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_mul (&result, &result, &temp, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
+| exp DIVIDE exp            {
+			    temp = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_div (&result, &result, &temp, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
+| exp POWER exp             {
+			    temp = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_pow (&result, &result, &temp, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
+| MINUS exp  %prec NEG     { 
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_neg (&result, &result, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
 | OKRSKOB exp ZKRSKOB      // value is on stack
-| EXP OKRSKOB exp ZKRSKOB	{ mpfr_exp (sp, sp, 0);  mpfr_set (result, sp, 0);  }
-| LN OKRSKOB exp ZKRSKOB	{ mpfr_log (sp, sp, 0);  mpfr_set (result, sp, 0);  }
-| SIN OKRSKOB exp ZKRSKOB	{ mpfr_sin (sp, sp, 0);  mpfr_set (result, sp, 0);  }
-| COS OKRSKOB exp ZKRSKOB	{ mpfr_cos (sp, sp, 0);  mpfr_set (result, sp, 0);  }
-| TAN OKRSKOB exp ZKRSKOB	{ mpfr_tan (sp, sp, 0);  mpfr_set (result, sp, 0);  }
-| ARCSIN OKRSKOB exp ZKRSKOB	{ mpfr_asin (sp, sp, 0);  mpfr_set (result, sp, 0);  }
-| ARCCOS OKRSKOB exp ZKRSKOB	{ mpfr_acos (sp, sp, 0);  mpfr_set (result, sp, 0);  }
-| ARCTAN OKRSKOB exp ZKRSKOB	{ mpfr_atan (sp, sp, 0);  mpfr_set (result, sp, 0);  }
-| COTAN OKRSKOB exp ZKRSKOB	{ mpfr_cot (sp, sp, 0);  mpfr_set (result, sp, 0);  }
+| EXP OKRSKOB exp ZKRSKOB   { 
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_exp (&result, &result, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
+| LN OKRSKOB exp ZKRSKOB   { 
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_log (&result, &result, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
+| SIN OKRSKOB exp ZKRSKOB   { 
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_sin (&result, &result, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
+| COS OKRSKOB exp ZKRSKOB   { 
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_cos (&result, &result, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
+| TAN OKRSKOB exp ZKRSKOB   { 
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_tan (&result, &result, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
+| ARCSIN OKRSKOB exp ZKRSKOB   { 
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_asin (&result, &result, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
+| ARCCOS OKRSKOB exp ZKRSKOB   { 
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_acos (&result, &result, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
+| ARCTAN OKRSKOB exp ZKRSKOB   { 
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_atan (&result, &result, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
+| COTAN OKRSKOB exp ZKRSKOB   { 
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_cot (&result, &result, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
 
 ;
 %%
 
 int yyerror (char const *s) {
-   fprintf (stderr, "%s\n", s);
-   return 1;
+   fprintf (stderr, "%s near symbol %s\n", s, yytext);
+   exit (2);
  }

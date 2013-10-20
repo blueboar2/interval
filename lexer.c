@@ -1,6 +1,6 @@
 %{
 #include "interval.tab.h"
-#include <mpfr.h>
+#include <stdlib.h>
 %}
 
 %%
@@ -44,5 +44,6 @@
 
 "x"							{ return IKS; }
 
-.							{ return 0; }
+.							{ printf ("cannot parse %s", yytext);
+							  exit(1); }
 %%

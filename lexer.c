@@ -1,9 +1,10 @@
 %{
 #include "interval.tab.h"
+#include <mpfr.h>
 %}
 
 %%
-[0-9]*[\.\,]?[0-9]+([eE][-+]?[0-9]+)?			{ mpf_init2(yylval,10000); gmp_sscanf (yytext, "%F", &yylval); return NUM; }
+[0-9]*[\.\,]?[0-9]+([eE][-+]?[0-9]+)?			{ return NUM; }
 "+inf"							{ return PLUSINF; }
 "-inf"							{ return MINUSINF; }
 "U"							{ return UNIF; }
@@ -19,9 +20,14 @@
 "cos"							{ return COS; }
 "tan"							{ return TAN; }
 "tg"							{ return TAN; }
-"cotan"							{ return COTAN; }
-"ctan"							{ return COTAN; }
+"cot"							{ return COTAN; }
 "ctg"							{ return COTAN; }
+"asin"							{ return ARCSIN; }
+"arcsin"						{ return ARCSIN; }
+"acos"							{ return ARCCOS; }
+"arccos"						{ return ARCCOS; }
+"atan"							{ return ARCTAN; }
+"arctg"							{ return ARCTAN; }
 
 "**"							{ return POWER; }
 

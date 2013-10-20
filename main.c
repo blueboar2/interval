@@ -3,13 +3,12 @@
 #include <string.h>
 
 #include <glib.h>
-#include <gmp.h>
+#include <mpfr.h>
 
     char *InputString1;
     char *InputString2;
 
-    mpf_t yylval;
-    mpf_t result;
+    mpfr_t result;
 
 char* inputString (unsigned int realloc_size)
 {
@@ -43,7 +42,6 @@ char* inputString (unsigned int realloc_size)
 
 int main () {
     char *str_divided;
-    //mpfr_t s;
 
     puts ("Input first string");
     InputString1 = inputString(10);
@@ -52,9 +50,11 @@ int main () {
 
 //    printf ("\nYour first string is %s\nYour second string is %s\n", InputString1, InputString2);
 
+    mpfr_set_default_prec(20000);
+    mpfr_init (result);
     yy_scan_string (InputString1);
     yyparse();
-    gmp_printf ("%F\n", result);
+    mpfr_printf ("%Rf",result);
 
     // here is some interesting code
 

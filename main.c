@@ -8,7 +8,9 @@
     char *InputString1;
     char *InputString2;
 
-    mpfr_t result;
+    __mpfr_struct result, temp;
+    GArray *stack;
+    gint stacksize;
 
 char* inputString (unsigned int realloc_size)
 {
@@ -43,6 +45,12 @@ char* inputString (unsigned int realloc_size)
 int main () {
     char *str_divided;
 
+    stack = g_array_new (FALSE, FALSE, sizeof(__mpfr_struct));
+    stacksize = 0;
+    mpfr_set_default_prec(20000);
+    mpfr_init (&result);
+    mpfr_init (&temp);
+
     puts ("Input first string");
     InputString1 = inputString(10);
 //    puts ("Input second string");
@@ -50,11 +58,12 @@ int main () {
 
 //    printf ("\nYour first string is %s\nYour second string is %s\n", InputString1, InputString2);
 
-    mpfr_set_default_prec(20000);
-    mpfr_init (result);
+    
     yy_scan_string (InputString1);
     yyparse();
-    mpfr_printf ("%Rf",result);
+    result = g_array_index(stack, __mpfr_struct, 0);
+    stack = g_array_remove_index(stack, 0);
+    mpfr_printf ("%.100Rg", &result);
 
     // here is some interesting code
 

@@ -1,16 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include <glib.h>
-#include <mpfr.h>
+#include "main.h"
 
     char *InputString1;
     char *InputString2;
-
-    __mpfr_struct result, temp;
-    GArray *stack;
-    gint stacksize;
 
 char* inputString (unsigned int realloc_size)
 {
@@ -47,9 +38,15 @@ int main () {
 
     stack = g_array_new (FALSE, FALSE, sizeof(__mpfr_struct));
     stacksize = 0;
+    intervals = g_array_new (FALSE, FALSE, sizeof(temp1));
+    intervalsize = 0;
+
     mpfr_set_default_prec(20000);
     mpfr_init (&result);
     mpfr_init (&temp);
+    
+    mpfr_init (&con1e30);
+    mpfr_set_str (&con1e30, "1e30", 10, 0);
 
     puts ("Input first string");
     InputString1 = inputString(10);
@@ -61,18 +58,14 @@ int main () {
     
     yy_scan_string (InputString1);
     yyparse();
-    result = g_array_index(stack, __mpfr_struct, 0);
-    stack = g_array_remove_index(stack, 0);
-    mpfr_printf ("%.100Rg", &result);
+    temp1 = g_array_index(intervals, struct interval, 0);
+    gmp_printf ("Left: %Zd\n", &temp1.left);
+    gmp_printf ("Right: %Zd\n", &temp1.right);
 
-    // here is some interesting code
+    // here is some interesting code to unify inequalities
 
     free (InputString1);
     free (InputString2);
 
-    //mpfr_init2 (s, 200);
-    //mpfr_set_d (s, 1.0, MPFR_RNDD);
-    //mpfr_out_str (stdout, 10, 0, s, MPFR_RNDD);
-    //mpfr_clear (s);
     return 0;
     }

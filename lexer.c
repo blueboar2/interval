@@ -1,10 +1,20 @@
 %{
 #include "interval.tab.h"
-#include <stdlib.h>
+#include "main.h"
 %}
 
 %%
 [0-9]*[\.\,]?[0-9]+([eE][-+]?[0-9]+)?			{ return NUM; }
+
+"++"							{ printf ("cannot parse ++");
+							  exit(4); }
+"+-"							{ printf ("cannot parse +-");
+							  exit(4); }
+"-+"							{ printf ("cannot parse -+");
+							  exit(4); }
+"--"							{ printf ("cannot parse --");
+							  exit(4); }
+
 "+inf"							{ return PLUSINF; }
 "-inf"							{ return MINUSINF; }
 "U"							{ return UNIF; }

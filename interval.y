@@ -1,22 +1,14 @@
 /* Infix notation calculator.  */
 
 %{
-  #include <stdio.h>
   extern char *yytext;
   int yylex (void);
   #define YYSTYPE int
-  #include <mpfr.h>
-  #include <glib.h>
-  #include <assert.h>
-  extern __mpfr_struct result, temp;
-  extern GArray *stack;
-  extern gint stacksize;
+  #include "main.h"
 
 %}
 
 /* Bison declarations.  */
-//%define api.value.type {mpf_t}
-
 %token OKRSKOB ZKRSKOB OKVSKOB ZKVSKOB
 %token LESS GREATER LESSEQUAL GREATEREQUAL
 %token PLUSINF MINUSINF UNIF
@@ -29,6 +21,96 @@
 %right POWER        /* exponentiation */
 
 %% /* The grammar follows.  */
+
+intervalloop:
+  smallinterval
+//| mediuminterval
+//| largeinterval
+| unifiedinterval
+
+unifiedinterval:
+  OKRSKOB smallinterval ZKRSKOB UNIF unifiedinterval
+//| OKRSKOB mediuminterval ZKRSKOB UNIF unifiedinterval
+//| largeinterval UNIF unifiedinterval
+| OKRSKOB smallinterval ZKRSKOB
+//| OKRSKOB mediuminterval ZKRSKOB
+//| largeinterval
+
+smallinterval:
+  exp otnos IKS
+			    {
+			    mpz_init (&temp1.left);
+			    mpz_init (&temp1.right);
+			    
+			    if (($2 == LESS) || ($2 == LESSEQUAL)) {
+			     temp1.rightinf = true;
+			     temp1.leftinf = false;
+			     temp = g_array_index (stack, __mpfr_struct, --stacksize);
+			     stack = g_array_remove_index (stack, stacksize);
+			     mpfr_mul (&temp, &temp, &con1e30, 0);
+			     mpfr_get_z (&temp1.left, &temp, 0);
+			     temp1.openright = false;
+			     if ($2 == LESS) {temp1.openleft = false;} else {temp1.openleft = true;};
+			    }
+			    else
+			    {
+			     temp1.leftinf = true;
+			     temp1.rightinf = false;
+			     temp = g_array_index (stack, __mpfr_struct, --stacksize);
+			     stack = g_array_remove_index (stack, stacksize);
+			     mpfr_mul (&temp, &temp, &con1e30, 0);
+			     mpfr_get_z (&temp1.right, &temp, 0);
+			     temp1.openleft = false;
+			     if ($2 == GREATER) {temp1.openright = false;} else {temp1.openright = true;};
+			    }
+
+			    g_array_append_val (intervals, temp1);
+			    intervalsize++;
+			    }
+| IKS otnos exp
+			    {
+			    mpz_init (&temp1.left);
+			    mpz_init (&temp1.right);
+			    
+			    if (($2 == GREATER) || ($2 == GREATEREQUAL)) {
+			     temp1.rightinf = true;
+			     temp1.leftinf = false;
+			     temp = g_array_index (stack, __mpfr_struct, --stacksize);
+			     stack = g_array_remove_index (stack, stacksize);
+			     mpfr_mul (&temp, &temp, &con1e30, 0);
+			     mpfr_get_z (&temp1.left, &temp, 0);
+			     temp1.openright = false;
+			     if ($2 == GREATER) {temp1.openleft = false;} else {temp1.openleft = true;};
+			    }
+			    else
+			    {
+			     temp1.leftinf = true;
+			     temp1.rightinf = false;
+			     temp = g_array_index (stack, __mpfr_struct, --stacksize);
+			     stack = g_array_remove_index (stack, stacksize);
+			     mpfr_mul (&temp, &temp, &con1e30, 0);
+			     mpfr_get_z (&temp1.right, &temp, 0);
+			     temp1.openleft = false;
+			     if ($2 == LESS) {temp1.openright = false;} else {temp1.openright = true;};
+			    }
+
+			    g_array_append_val (intervals, temp1);
+			    intervalsize++;
+			    }
+
+otnos:
+ LESS 			   { $$ = LESS;}
+| GREATER 		   { $$ = GREATER;}
+| LESSEQUAL		   { $$ = LESSEQUAL;}
+| GREATEREQUAL		   { $$ = GREATEREQUAL;}
+
+lexp:
+  exp			   { $$ = NUM;}
+| MINUSINF		   { $$ = MINUSINF;}
+
+rexp:
+  exp			   { $$ = NUM;}
+| PLUSINF		   { $$ = PLUSINF;}
 
 exp:
   NUM                      {

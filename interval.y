@@ -24,50 +24,23 @@
 
 intervalloop:
   smallinterval
-//| mediuminterval
+| mediuminterval
 //| largeinterval
 | unifiedinterval
 
 unifiedinterval:
   OKRSKOB smallinterval ZKRSKOB UNIF unifiedinterval
-//| OKRSKOB mediuminterval ZKRSKOB UNIF unifiedinterval
+| OKRSKOB mediuminterval ZKRSKOB UNIF unifiedinterval
 //| largeinterval UNIF unifiedinterval
 | OKRSKOB smallinterval ZKRSKOB
-//| OKRSKOB mediuminterval ZKRSKOB
+| OKRSKOB mediuminterval ZKRSKOB
 //| largeinterval
 
-smallinterval:
-  exp otnos IKS
-			    {
-			    mpz_init (&temp1.left);
-			    mpz_init (&temp1.right);
-			    
-			    if (($2 == LESS) || ($2 == LESSEQUAL)) {
-			     temp1.rightinf = true;
-			     temp1.leftinf = false;
-			     temp = g_array_index (stack, __mpfr_struct, --stacksize);
-			     stack = g_array_remove_index (stack, stacksize);
-			     mpfr_mul (&temp, &temp, &con1e30, 0);
-			     mpfr_get_z (&temp1.left, &temp, 0);
-			     temp1.openright = false;
-			     if ($2 == LESS) {temp1.openleft = false;} else {temp1.openleft = true;};
-			    }
-			    else
-			    {
-			     temp1.leftinf = true;
-			     temp1.rightinf = false;
-			     temp = g_array_index (stack, __mpfr_struct, --stacksize);
-			     stack = g_array_remove_index (stack, stacksize);
-			     mpfr_mul (&temp, &temp, &con1e30, 0);
-			     mpfr_get_z (&temp1.right, &temp, 0);
-			     temp1.openleft = false;
-			     if ($2 == GREATER) {temp1.openright = false;} else {temp1.openright = true;};
-			    }
+mediuminterval:
+  bexp otnos IKS otnos bexp	{printf ("Medium\n");}
 
-			    g_array_append_val (intervals, temp1);
-			    intervalsize++;
-			    }
-| IKS otnos exp
+smallinterval:
+IKS otnos exp
 			    {
 			    mpz_init (&temp1.left);
 			    mpz_init (&temp1.right);
@@ -101,15 +74,12 @@ smallinterval:
 otnos:
  LESS 			   { $$ = LESS;}
 | GREATER 		   { $$ = GREATER;}
-| LESSEQUAL		   { $$ = LESSEQUAL;}
+| LESSEQUAL 		   { $$ = LESSEQUAL;}
 | GREATEREQUAL		   { $$ = GREATEREQUAL;}
 
-lexp:
+bexp:
   exp			   { $$ = NUM;}
 | MINUSINF		   { $$ = MINUSINF;}
-
-rexp:
-  exp			   { $$ = NUM;}
 | PLUSINF		   { $$ = PLUSINF;}
 
 exp:

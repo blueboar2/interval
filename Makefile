@@ -19,4 +19,4 @@ interval.tab.o:
 
 lex.yy.o:
 	flex --header-file=interval.lex.h lexer.c
-	gcc -c lex.yy.c
+	gcc  -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -c lex.yy.c

@@ -6,6 +6,10 @@
 %%
 [0-9]*[\.\,]?[0-9]+([eE][-+]?[0-9]+)?			{ return NUM; }
 
+"+inf"							{ return PLUSINF; }
+"-inf"							{ return MINUSINF; }
+"U"							{ return UNIF; }
+
 "++"							{ printf ("cannot parse ++");
 							  exit(4); }
 "+-"							{ printf ("cannot parse +-");
@@ -14,10 +18,6 @@
 							  exit(4); }
 "--"							{ printf ("cannot parse --");
 							  exit(4); }
-
-"+inf"							{ return PLUSINF; }
-"-inf"							{ return MINUSINF; }
-"U"							{ return UNIF; }
 
 "<="							{ return LESSEQUAL; }
 ">="							{ return GREATEREQUAL; }

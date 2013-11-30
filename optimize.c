@@ -44,7 +44,6 @@ void optimize ()
 		    gmp_printf("Temp2 Left: %Zd\n", &temp2.left);
 		    gmp_printf("Temp2 Right: %Zd\n", &temp2.right);
 
-
 		if (mpz_cmp(&temp1.left, &temp2.left) == 0)
 		    {
 		    if (mpz_cmp(&temp1.right, &temp2.right) < 0)
@@ -121,5 +120,5 @@ void optimize ()
 			    g_array_insert_val(intervals, cur_pol-1, temp1);
 			    cur_pol++;	//TO NEXT INTERVAL
 			}
-	    }
-	};
+	    } // MAIN IF LOOP
+	}; // WHILE LOOP

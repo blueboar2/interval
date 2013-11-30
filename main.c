@@ -44,20 +44,33 @@ int main () {
     mpfr_set_default_prec(20000);
     mpfr_init (&result);
     mpfr_init (&temp);
-    
+
     mpfr_init (&con1e30);
     mpfr_set_str (&con1e30, "1e30", 10, 0);
 
+    mpz_init (&pcon1e100);
+    mpz_set_str (&pcon1e100, "1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 10);
+
+    mpz_init (&ocon1e100);
+    mpz_set_str (&ocon1e100, "-1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 10);
+
     puts ("Input first string");
     InputString1 = inputString(10);
+
+    yy_scan_string (InputString1);
+    yyparse();
+    optimize();
+    //tostring(String1?);
+
 //    puts ("Input second string");
 //    InputString2 = inputString(10);
+//    yy_scan_string (InputString2);
+//    yyparse();
+//    optimize();
+//    tostring(String2?);
 
 //    printf ("\nYour first string is %s\nYour second string is %s\n", InputString1, InputString2);
 
-    
-    yy_scan_string (InputString1);
-    yyparse();
     temp1 = g_array_index(intervals, struct interval, 0);
     gmp_printf ("Left: %Zd\n", &temp1.left);
     gmp_printf ("Right: %Zd\n", &temp1.right);

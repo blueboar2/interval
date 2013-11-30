@@ -8,10 +8,13 @@ clean:
 	rm -rf interval.tab.*
 
 interval:	main.o
-	gcc -o interval -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include interval.tab.o lex.yy.o main.o -lmpfr -lgmp -lfl -lm -lglib-2.0
+	gcc -o interval -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include interval.tab.o lex.yy.o optimize.o main.o -lmpfr -lgmp -lfl -lm -lglib-2.0
 
-main.o:		interval.tab.o lex.yy.o
+main.o:		interval.tab.o lex.yy.o optimize.o
 	gcc  -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -c main.c
+
+optimize.o:
+	gcc  -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -c optimize.c
 
 interval.tab.o:
 	bison -d interval.y

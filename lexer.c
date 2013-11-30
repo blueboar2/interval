@@ -10,13 +10,13 @@
 "-inf"							{ return MINUSINF; }
 "U"							{ return UNIF; }
 
-"++"							{ printf ("cannot parse ++");
+"++"							{ printf ("cannot parse ++\n");
 							  exit(4); }
-"+-"							{ printf ("cannot parse +-");
+"+-"							{ printf ("cannot parse +-\n");
 							  exit(4); }
-"-+"							{ printf ("cannot parse -+");
+"-+"							{ printf ("cannot parse -+\n");
 							  exit(4); }
-"--"							{ printf ("cannot parse --");
+"--"							{ printf ("cannot parse --\n");
 							  exit(4); }
 
 "<="							{ return LESSEQUAL; }
@@ -54,6 +54,6 @@
 
 "x"							{ return IKS; }
 
-.							{ printf ("cannot parse %s", yytext);
+.							{ printf ("cannot parse %s\n", yytext);
 							  exit(1); }
 %%

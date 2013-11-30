@@ -39,7 +39,7 @@ largeinterval:     kvskob bexp TOZA bexp kvskob {
 				if ($5 == OKVSKOB) {temp1.openright = true;} else {temp1.openright = false;};
 				
 				if ($4 == PLUSINF) { mpz_set(&temp1.right, &pcon1e100);};
-				if ($4 == MINUSINF) {fprintf(stderr, "Minus infinity at right of interval"); exit(10);};
+				if ($4 == MINUSINF) {fprintf(stderr, "Minus infinity at right of interval\n"); exit(10);};
 				if (($4 != MINUSINF) && ($4 != PLUSINF))
 						    { temp = g_array_index (stack, __mpfr_struct, --stacksize);
 						    stack = g_array_remove_index (stack, stacksize);
@@ -47,7 +47,7 @@ largeinterval:     kvskob bexp TOZA bexp kvskob {
 						    mpfr_get_z (&temp1.right, &temp, 0); };
 
 				if ($2 == MINUSINF) { mpz_set(&temp1.left, &ocon1e100);};
-				if ($2 == PLUSINF) {fprintf(stderr, "Plus infinity at left of interval"); exit(20);};
+				if ($2 == PLUSINF) {fprintf(stderr, "Plus infinity at left of interval\n"); exit(20);};
 				if (($2 != MINUSINF) && ($1 != PLUSINF)) 
 						    { temp = g_array_index (stack, __mpfr_struct, --stacksize);
 						     stack = g_array_remove_index (stack, stacksize);
@@ -55,12 +55,18 @@ largeinterval:     kvskob bexp TOZA bexp kvskob {
 						     mpfr_get_z (&temp1.left, &temp, 0);
 						     };
 
-				if (mpz_cmp(&temp1.left, &temp1.right)>0) {fprintf(stderr, "Right interval must be larger than left"); exit(30);};
+				if (mpz_cmp(&temp1.left, &temp1.right)>0) {fprintf(stderr, "Right interval must be larger than left\n"); exit(30);};
 				if ((mpz_cmp(&temp1.left, &temp1.right) == 0) && ((temp1.openleft == true) || (temp1.openright == true))) 
-				                   {fprintf(stderr, "Equal left and right sides must contain equality also"); exit(40);};
+				                   {fprintf(stderr, "Equal left and right sides must contain equality also\n"); exit(40);};
 
 				g_array_append_val (intervals, temp1);
-				intervalsize++;}
+				intervalsize++;
+				
+				if (($2 == MINUSINF) && (temp1.openleft == FALSE))
+				    {fprintf(stderr, "Infinities must be open, not closed\n"); exit(50);};
+				if (($4 == PLUSINF) && (temp1.openright == FALSE))
+				    {fprintf(stderr, "Infinities must be open, not closed\n"); exit(50);};
+				}
 
 mediuminterval:    bexp leq IKS leq bexp	{
 				mpz_init (&temp1.left);
@@ -70,7 +76,7 @@ mediuminterval:    bexp leq IKS leq bexp	{
 				if ($4 == LESS) {temp1.openright = true;} else {temp1.openright = false;};
 
 				if ($5 == PLUSINF) { mpz_set(&temp1.right, &pcon1e100);};
-				if ($5 == MINUSINF) {fprintf(stderr, "Minus infinity at right of interval"); exit(10);};
+				if ($5 == MINUSINF) {fprintf(stderr, "Minus infinity at right of interval\n"); exit(10);};
 				if (($5 != MINUSINF) && ($5 != PLUSINF))
 						    { temp = g_array_index (stack, __mpfr_struct, --stacksize);
 						    stack = g_array_remove_index (stack, stacksize);
@@ -78,7 +84,7 @@ mediuminterval:    bexp leq IKS leq bexp	{
 						    mpfr_get_z (&temp1.right, &temp, 0); };
 
 				if ($1 == MINUSINF) {mpz_set(&temp1.left, &ocon1e100);};
-				if ($1 == PLUSINF) {fprintf(stderr, "Plus infinity at left of interval"); exit(20);};
+				if ($1 == PLUSINF) {fprintf(stderr, "Plus infinity at left of interval\n"); exit(20);};
 				if (($1 != MINUSINF) && ($1 != PLUSINF)) 
 						    { temp = g_array_index (stack, __mpfr_struct, --stacksize);
 						     stack = g_array_remove_index (stack, stacksize);
@@ -86,12 +92,19 @@ mediuminterval:    bexp leq IKS leq bexp	{
 						     mpfr_get_z (&temp1.left, &temp, 0);
 						     };
 
-				if (mpz_cmp(&temp1.left, &temp1.right)>0) {fprintf(stderr, "Right interval must be larger than left"); exit(30);};
+				if (mpz_cmp(&temp1.left, &temp1.right)>0) {fprintf(stderr, "Right interval must be larger than left\n"); exit(30);};
 				if ((mpz_cmp(&temp1.left, &temp1.right) == 0) && ((temp1.openleft == true) || (temp1.openright == true))) 
-				                   {fprintf(stderr, "Equal left and right sides must contain equality also"); exit(40);};
+				                   {fprintf(stderr, "Equal left and right sides must contain equality also\n"); exit(40);};
 
 				g_array_append_val (intervals, temp1);
-				intervalsize++;}
+				intervalsize++;
+				
+				if (($1 == MINUSINF) && (temp1.openleft == FALSE))
+				    {fprintf(stderr, "Infinities must be open, not closed\n"); exit(50);};
+				if (($5 == PLUSINF) && (temp1.openright == FALSE))
+				    {fprintf(stderr, "Infinities must be open, not closed\n"); exit(50);};
+				
+				}
                  | bexp geq IKS geq bexp	{
 				mpz_init (&temp1.left);
 				mpz_init (&temp1.right);
@@ -100,7 +113,7 @@ mediuminterval:    bexp leq IKS leq bexp	{
 				if ($4 == GREATER) {temp1.openright = true;} else {temp1.openright = false;};
 
 				if ($5 == MINUSINF) { mpz_set(&temp1.left, &ocon1e100);};
-				if ($5 == PLUSINF) {fprintf(stderr, "Plus infinity at left of interval"); exit(10);};
+				if ($5 == PLUSINF) {fprintf(stderr, "Plus infinity at left of interval\n"); exit(10);};
 				if (($5 != MINUSINF) && ($5 != PLUSINF))
 						    { temp = g_array_index (stack, __mpfr_struct, --stacksize);
 						    stack = g_array_remove_index (stack, stacksize);
@@ -108,7 +121,7 @@ mediuminterval:    bexp leq IKS leq bexp	{
 						    mpfr_get_z (&temp1.left, &temp, 0); };
 
 				if ($1 == PLUSINF) {mpz_set(&temp1.right, &pcon1e100);};
-				if ($1 == MINUSINF) {fprintf(stderr, "Minus infinity at right of interval"); exit(20);};
+				if ($1 == MINUSINF) {fprintf(stderr, "Minus infinity at right of interval\n"); exit(20);};
 				if (($1 != MINUSINF) && ($1 != PLUSINF)) 
 						    { temp = g_array_index (stack, __mpfr_struct, --stacksize);
 						     stack = g_array_remove_index (stack, stacksize);
@@ -117,12 +130,18 @@ mediuminterval:    bexp leq IKS leq bexp	{
 						     };
 
 
-				if (mpz_cmp(&temp1.left, &temp1.right)>0) {fprintf(stderr, "Right interval must be smaller than left"); exit(30);};
+				if (mpz_cmp(&temp1.left, &temp1.right)>0) {fprintf(stderr, "Right interval must be smaller than left\n"); exit(30);};
 				if ((mpz_cmp(&temp1.left, &temp1.right) == 0) && ((temp1.openleft == true) || (temp1.openright == true))) 
-				                   {fprintf(stderr, "Equal left and right sides must contain equality also"); exit(40);};
+				                   {fprintf(stderr, "Equal left and right sides must contain equality also\n"); exit(40);};
 
 				g_array_append_val (intervals, temp1);
-				intervalsize++;}
+				intervalsize++;
+				
+				if (($5 == MINUSINF) && (temp1.openleft == FALSE))
+				    {fprintf(stderr, "Infinities must be open, not closed\n"); exit(50);};
+				if (($1 == PLUSINF) && (temp1.openright == FALSE))
+				    {fprintf(stderr, "Infinities must be open, not closed\n"); exit(50);};
+				}
 
 smallinterval:   IKS otnos exp
 			    {

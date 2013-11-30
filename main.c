@@ -1,8 +1,5 @@
 #include "main.h"
 
-    char *InputString1;
-    char *InputString2;
-
 char* inputString (unsigned int realloc_size)
 {
     unsigned int current_size = 0;
@@ -36,46 +33,30 @@ char* inputString (unsigned int realloc_size)
 int main () {
     char *str_divided;
 
-    stack = g_array_new (FALSE, FALSE, sizeof(__mpfr_struct));
-    stacksize = 0;
-    intervals = g_array_new (FALSE, FALSE, sizeof(temp1));
-    intervalsize = 0;
-
-    mpfr_set_default_prec(20000);
-    mpfr_init (&result);
-    mpfr_init (&temp);
-
-    mpfr_init (&con1e30);
-    mpfr_set_str (&con1e30, "1e30", 10, 0);
-
-    mpz_init (&pcon1e100);
-    mpz_set_str (&pcon1e100, "1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 10);
-
-    mpz_init (&ocon1e100);
-    mpz_set_str (&ocon1e100, "-1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 10);
-
+    init_state();
     puts ("Input first string");
     InputString1 = inputString(10);
-
     yy_scan_string (InputString1);
     yyparse();
     optimize();
-    //tostring(String1?);
+    tostring();
+    OutputString1 = g_string_new (tempstring->str);
 
-//    puts ("Input second string");
-//    InputString2 = inputString(10);
-//    yy_scan_string (InputString2);
-//    yyparse();
-//    optimize();
-//    tostring(String2?);
+    init_state();
+    puts ("Input second string");
+    InputString2 = inputString(10);
+    yy_scan_string (InputString2);
+    yyparse();
+    optimize();
+    tostring();
+    OutputString2 = g_string_new (tempstring->str);
 
-//    printf ("\nYour first string is %s\nYour second string is %s\n", InputString1, InputString2);
+    printf ("Calculated first string: %s\n", OutputString1->str);
+    printf ("Calculated second string: %s\n", OutputString2->str);
 
-    temp1 = g_array_index(intervals, struct interval, 0);
-    gmp_printf ("Left: %Zd\n", &temp1.left);
-    gmp_printf ("Right: %Zd\n", &temp1.right);
-
-    // here is some interesting code to unify inequalities
+    if (g_strcmp0(OutputString1->str, OutputString2->str) == 0)
+	{printf ("Intervals are IDENTICAL\n"); }
+	else {printf ("Intervals are NOT identical\n"); }
 
     free (InputString1);
     free (InputString2);

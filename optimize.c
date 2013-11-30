@@ -36,13 +36,6 @@ void optimize ()
 		temp2 = g_array_index (intervals, struct interval, cur_pol);
 		g_array_remove_index(intervals, cur_pol-1);
 		g_array_remove_index(intervals, cur_pol-1);
-		
-		    printf ("Intervalsize: %d\n", intervalsize);
-		    printf ("Cur_pol: %d\n", cur_pol);
-		    gmp_printf("Temp1 Left: %Zd\n", &temp1.left);
-		    gmp_printf("Temp1 Right: %Zd\n", &temp1.right);
-		    gmp_printf("Temp2 Left: %Zd\n", &temp2.left);
-		    gmp_printf("Temp2 Right: %Zd\n", &temp2.right);
 
 		if (mpz_cmp(&temp1.left, &temp2.left) == 0)
 		    {

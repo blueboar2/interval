@@ -6,6 +6,13 @@
 
 typedef enum { false, true } bool;
 
+char *InputString1;
+char *InputString2;
+
+GString *OutputString1;
+GString *OutputString2;
+GString *tempstring;
+
 struct interval {
     bool openleft;
     bool openright;

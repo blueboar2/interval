@@ -55,9 +55,6 @@ largeinterval:     kvskob bexp TOZA bexp kvskob {
 						     mpfr_get_z (&temp1.left, &temp, 0);
 						     };
 
-				gmp_printf ("Left %Zd\n", &temp1.left);
-				gmp_printf ("Right %Zd\n", &temp1.right);
-
 				if (mpz_cmp(&temp1.left, &temp1.right)>0) {fprintf(stderr, "Right interval must be larger than left"); exit(30);};
 				if ((mpz_cmp(&temp1.left, &temp1.right) == 0) && ((temp1.openleft == true) || (temp1.openright == true))) 
 				                   {fprintf(stderr, "Equal left and right sides must contain equality also"); exit(40);};

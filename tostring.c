@@ -15,7 +15,7 @@ void tostring ()
 		    {
 		    mpfr_set_z (&temp, &temp1.left, 0);
 		    mpfr_div (&temp, &temp, &con1e30, 0);
-		    mpfr_sprintf(sstr, "%RNg", &temp);
+		    mpfr_sprintf(sstr, "%.30RNf", &temp);
 		    g_string_append(tempstring,sstr);
 		    };
 	    g_string_append(tempstring,";");
@@ -23,7 +23,7 @@ void tostring ()
 		    {
 		    mpfr_set_z (&temp, &temp1.right, 0);
 		    mpfr_div (&temp, &temp, &con1e30, 0);
-		    mpfr_sprintf(sstr, "%RNg", &temp);
+		    mpfr_sprintf(sstr, "%.30RNf", &temp);
 		    g_string_append(tempstring,sstr);
 		    };
 	    if (temp1.openright == TRUE) {g_string_append(tempstring,"[");} else {g_string_append(tempstring,"]");}

@@ -17,7 +17,7 @@
 %token NUM
 %left MINUS PLUS
 %left MULTIPLY DIVIDE
-%precedence NEG   /* negation--unary minus */
+%left NEG   /* negation--unary minus */
 %right POWER        /* exponentiation */
 
 %% /* The grammar follows.  */

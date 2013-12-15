@@ -25,6 +25,8 @@
 intervalloop:      smallinterval
                  | mediuminterval
                  | largeinterval
+                 | OKRSKOB smallinterval ZKRSKOB
+                 | OKRSKOB mediuminterval ZKRSKOB
                  | unifiedinterval
 
 unifiedinterval:     OKRSKOB smallinterval ZKRSKOB UNIF intervalloop
@@ -153,9 +155,9 @@ smallinterval:   IKS otnos exp
 			     stack = g_array_remove_index (stack, stacksize);
 			     mpfr_mul (&temp, &temp, &con1e30, 0);
 			     mpfr_get_z (&temp1.left, &temp, 0);
-			     temp1.openright = false;
+			     temp1.openright = true;
 			     mpz_set(&temp1.right, &pcon1e100);
-			     if ($2 == GREATER) {temp1.openleft = false;} else {temp1.openleft = true;};
+			     if ($2 == GREATER) {temp1.openleft = true;} else {temp1.openleft = false;};
 			    }
 			    else
 			    {
@@ -163,9 +165,9 @@ smallinterval:   IKS otnos exp
 			     stack = g_array_remove_index (stack, stacksize);
 			     mpfr_mul (&temp, &temp, &con1e30, 0);
 			     mpfr_get_z (&temp1.right, &temp, 0);
-			     temp1.openleft = false;
+			     temp1.openleft = true;
 			     mpz_set(&temp1.left, &ocon1e100);
-			     if ($2 == LESS) {temp1.openright = false;} else {temp1.openright = true;};
+			     if ($2 == LESS) {temp1.openright = true;} else {temp1.openright = false;};
 			    }
 
 			    g_array_append_val (intervals, temp1);

@@ -26,7 +26,7 @@ void optimize ()
 		};
 	    };
 	  };
-	
+
 	//OPTIMIZING
 	cur_pol = 1;
 	
@@ -64,12 +64,12 @@ void optimize ()
 			{
 			    if (mpz_cmp(&temp2.right, &temp1.right) < 0)
 				{
+				    g_array_insert_val(intervals, cur_pol-1, temp1);
 				    intervalsize--;
 				}
 			    else if (mpz_cmp(&temp2.right, &temp1.right) == 0)
 				{
 				    if (temp2.openright == FALSE) {temp1.openright = FALSE; };
-				    g_array_insert_val(intervals, cur_pol-1, temp1);
 				    intervalsize--;
 				}
 			    else if (mpz_cmp(&temp2.right, &temp1.right) > 0)
@@ -106,7 +106,7 @@ void optimize ()
 				    cur_pol++;	//TO NEXT INTERVAL
 				}
 			}
-		else // CHECK THAT FIRST AND SECOND INTERVALS DO NOT INTERSET
+		else // CHECK THAT FIRST AND SECOND INTERVALS DO NOT INTERSECT
 		if (mpz_cmp(&temp2.left, &temp1.right) > 0)
 			{
 			    g_array_insert_val(intervals, cur_pol-1, temp2);

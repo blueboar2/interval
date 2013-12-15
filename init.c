@@ -7,10 +7,8 @@ void init_state () {
     intervals = g_array_new (FALSE, FALSE, sizeof(temp1));
     intervalsize = 0;
 
-    mpfr_set_emax(2000000000);
-    printf("%i\n", mpfr_get_emax());
-
-    mpfr_set_default_prec(20000);
+    mpfr_set_emax(1000000);
+    mpfr_set_default_prec(1000000);
     mpfr_init (&result);
     mpfr_init (&temp);
 

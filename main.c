@@ -41,7 +41,6 @@ int main () {
     optimize();
     tostring();
     OutputString1 = g_string_new (tempstring->str);
-
     init_state();
     puts ("Input second string");
     InputString2 = inputString(10);

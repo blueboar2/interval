@@ -3,9 +3,9 @@
 void tostring ()
 	{
 	int i;
-	char sstr[200];
+	char sstr[20000];
 	tempstring = g_string_new(NULL);
-	
+
 	for (i=0; i<=intervalsize-1; i++)
 	    {
 	    temp1 = g_array_index (intervals, struct interval, i);

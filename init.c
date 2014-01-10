@@ -23,7 +23,8 @@ void init_state () {
     mpz_mul(&pcon1e100, &pcon1e100, &pcon1e100);	//1E120
     mpz_mul(&pcon1e100, &pcon1e100, &pcon1e100);	//1E240
     mpz_mul(&pcon1e100, &pcon1e100, &pcon1e100);	//1E480
+    mpz_mul(&pcon1e100, &pcon1e100, &pcon1e100);	//1E960
 
     mpz_init (&ocon1e100);
-    mpz_neg(&ocon1e100, &pcon1e100);		//-1E480
+    mpz_neg(&ocon1e100, &pcon1e100);		//-1E960
     }

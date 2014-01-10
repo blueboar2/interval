@@ -11,9 +11,10 @@
 /* Bison declarations.  */
 %token OKRSKOB ZKRSKOB OKVSKOB ZKVSKOB
 %token LESS GREATER LESSEQUAL GREATEREQUAL
-%token PLUSINF MINUSINF UNIF
+%token PLUSINF MINUSINF UNIF ZAP
 %token EXP LN SIN COS TAN COTAN TOZA IKS
 %token ARCSIN ARCCOS ARCTAN
+%token SQRT ROOT ABS NEG
 %token NUM
 %left MINUS PLUS
 %left MULTIPLY DIVIDE
@@ -251,6 +252,18 @@ exp:      NUM                      {
 			    stacksize++;
 			    }
         | OKRSKOB exp ZKRSKOB      // value is on stack
+        | ROOT OKRSKOB exp ZAP exp ZKRSKOB
+			    {
+			    temp = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    templong = mpfr_get_si(&temp, 0);
+			    if (templong<0) {fprintf(stderr, "error, root: negative power\n"); exit(1500);};
+			    mpfr_root (&result, &result, templong, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
         | EXP OKRSKOB exp ZKRSKOB   { 
 			    result = g_array_index (stack, __mpfr_struct, --stacksize);
 			    stack = g_array_remove_index (stack, stacksize);
@@ -314,7 +327,27 @@ exp:      NUM                      {
 			    g_array_append_val (stack, result);
 			    stacksize++;
 			    }
-
+        | SQRT OKRSKOB exp ZKRSKOB   { 
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_sqrt (&result, &result, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
+        | ABS OKRSKOB exp ZKRSKOB   { 
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_abs (&result, &result, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
+        | NEG OKRSKOB exp ZKRSKOB   { 
+			    result = g_array_index (stack, __mpfr_struct, --stacksize);
+			    stack = g_array_remove_index (stack, stacksize);
+			    mpfr_neg (&result, &result, 0);
+			    g_array_append_val (stack, result);
+			    stacksize++;
+			    }
 ;
 %%
 

@@ -4,7 +4,7 @@
 %}
 
 %%
-[0-9]*[\.\,]?[0-9]+([eE][-+]?[0-9]+)?			{ return NUM; }
+[0-9]*[\.]?[0-9]+([eE][-+]?[0-9]+)?			{ return NUM; }
 
 "+inf"							{ return PLUSINF; }
 "-inf"							{ return MINUSINF; }
@@ -23,6 +23,7 @@
 ">="							{ return GREATEREQUAL; }
 "<"							{ return LESS; }
 ">"							{ return GREATER; }
+","							{ return ZAP; }
 
 "exp"							{ return EXP; }
 "ln"							{ return LN; }
@@ -38,6 +39,10 @@
 "arccos"						{ return ARCCOS; }
 "atan"							{ return ARCTAN; }
 "arctg"							{ return ARCTAN; }
+"sqrt"							{ return SQRT; }
+"root"							{ return ROOT; }
+"neg"							{ return NEG; }
+"abs"							{ return ABS; }
 
 "**"							{ return POWER; }
 

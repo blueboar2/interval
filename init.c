@@ -15,6 +15,12 @@ void init_state () {
     mpfr_init (&con1e30);
     mpfr_set_str (&con1e30, "1e30", 10, 0);
 
+    mpfr_init (&con1);
+    mpfr_set_str (&con1, "1", 10, 0);
+
+    mpfr_init (&con0);
+    mpfr_set_str (&con0, "0", 10, 0);
+
     mpz_init(&ccon1e30);
     mpz_set_str(&ccon1e30, "1000000000000000000000000000000", 10);
 

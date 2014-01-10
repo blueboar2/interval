@@ -244,7 +244,7 @@ exp:      NUM                      {
 			    g_array_append_val (stack, result);
 			    stacksize++;
 			    }
-        | MINUS exp  %prec NEG     { 
+        | MINUS exp         { 
 			    result = g_array_index (stack, __mpfr_struct, --stacksize);
 			    stack = g_array_remove_index (stack, stacksize);
 			    mpfr_neg (&result, &result, 0);
@@ -258,9 +258,17 @@ exp:      NUM                      {
 			    stack = g_array_remove_index (stack, stacksize);
 			    result = g_array_index (stack, __mpfr_struct, --stacksize);
 			    stack = g_array_remove_index (stack, stacksize);
-			    templong = mpfr_get_si(&temp, 0);
-			    if (templong<0) {fprintf(stderr, "error, root: negative power\n"); exit(1500);};
-			    mpfr_root (&result, &result, templong, 0);
+			    if (mpfr_cmp(&temp, &con0)<=0) {fprintf(stderr, "error, root: negative power or zero\n"); exit(1500);};
+			    if (mpfr_cmp(&result, &con0)<=0)
+			    {
+			    templong = mpfr_get_si (&temp, 0);
+			    mpfr_root(&result, &result, templong, 0);
+			    }
+			    else
+			    {
+			    mpfr_div(&temp, &con1, &temp, 0);
+			    mpfr_pow (&result, &result, &temp, 0);
+			    };
 			    g_array_append_val (stack, result);
 			    stacksize++;
 			    }

@@ -28,8 +28,7 @@ gint stacksize;
 GArray *intervals;
 gint intervalsize;
 
-__mpfr_struct result, temp, con1e30;
+__mpfr_struct result, temp, con1e30, con1, con0;
 __mpz_struct ccon1e30, pcon1e100, ocon1e100;
 
 long templong;
-

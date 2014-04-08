@@ -23,10 +23,9 @@ struct interval {
 struct interval temp1, temp2;
 
 GArray *stack;
-gint stacksize;
-
+GArray *uarray;
+GArray *uarray2; 	//for unifying two
 GArray *intervals;
-gint intervalsize;
 
 __mpfr_struct result, temp, con1e30, con1, con0;
 __mpz_struct ccon1e30, pcon1e100, ocon1e100;

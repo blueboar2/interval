@@ -3,9 +3,7 @@
 void init_state () {
 
     stack = g_array_new (FALSE, FALSE, sizeof(__mpfr_struct));
-    stacksize = 0;
-    intervals = g_array_new (FALSE, FALSE, sizeof(temp1));
-    intervalsize = 0;
+    intervals = g_array_new (FALSE, FALSE, sizeof(uarray));
 
     mpfr_set_emax(50000);
     mpfr_set_default_prec(50000);

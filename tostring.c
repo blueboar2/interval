@@ -6,9 +6,11 @@ void tostring ()
 	char sstr[20000];
 	tempstring = g_string_new(NULL);
 
-	for (i=0; i<=intervalsize-1; i++)
+	uarray = g_array_index (intervals, GArray *, 0);
+
+	for (i=0; i<=uarray->len-1; i++)
 	    {
-	    temp1 = g_array_index (intervals, struct interval, i);
+	    temp1 = g_array_index (uarray, struct interval, i);
 
 	    if (temp1.openleft == TRUE) {g_string_append(tempstring,"]");} else {g_string_append(tempstring,"[");}
 	    if (mpz_cmp (&temp1.left, &ocon1e100) == 0) {g_string_append(tempstring,"-inf");} else 
@@ -28,6 +30,6 @@ void tostring ()
 		    };
 	    if (temp1.openright == TRUE) {g_string_append(tempstring,"[");} else {g_string_append(tempstring,"]");}
 
-	    if (i!=intervalsize-1) {g_string_append(tempstring,"U"); }
+	    if (i!=uarray->len-1) {g_string_append(tempstring,"U"); }
 	    }
 	};

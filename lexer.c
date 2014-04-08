@@ -9,6 +9,8 @@
 "+inf"							{ return PLUSINF; }
 "-inf"							{ return MINUSINF; }
 "U"							{ return UNIF; }
+"^"							{ return PERE; }
+
 
 "++"							{ printf ("cannot parse ++\n");
 							  exit(4); }
@@ -45,7 +47,6 @@
 "abs"							{ return ABS; }
 
 "**"							{ return POWER; }
-
 "+"							{ return PLUS; }
 "-"							{ return MINUS; }
 "*"							{ return MULTIPLY; }
@@ -55,7 +56,6 @@
 "["							{ return OKVSKOB; }
 "]"							{ return ZKVSKOB; }
 ";"							{ return TOZA; }
-"^"							{ return POWER; }
 
 "x"							{ return IKS; }
 

@@ -8,6 +8,9 @@ void tostring ()
 
 	uarray = g_array_index (intervals, GArray *, 0);
 
+	if (uarray->len!=0)	//EMPTY INTERVAL LOOP
+	{
+
 	for (i=0; i<=uarray->len-1; i++)
 	    {
 	    temp1 = g_array_index (uarray, struct interval, i);
@@ -32,4 +35,10 @@ void tostring ()
 
 	    if (i!=uarray->len-1) {g_string_append(tempstring,"U"); }
 	    }
+	    } //EMPTY INTERVAL LOOP
+	    else
+	    {
+	    sprintf (sstr, "NONE");
+	    g_string_append(tempstring,sstr);
+	    };
 	};

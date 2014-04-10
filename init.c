@@ -1,6 +1,6 @@
 #include "main.h"
 
-void init_state () {
+extern void init_state () {
 
     stack = g_array_new (FALSE, FALSE, sizeof(__mpfr_struct));
     intervals = g_array_new (FALSE, FALSE, sizeof(uarray));

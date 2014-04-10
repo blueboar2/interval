@@ -12,6 +12,8 @@ void optimize ()
 	mpz_init(&temp2.right);
 
 	uarray = g_array_index (intervals, GArray *, 0);
+	if (uarray->len > 0)
+	{ // empty interval is interval too
 
 	// SORTING
 	for (i=1; i<=uarray->len-1; i++)
@@ -115,4 +117,5 @@ void optimize ()
 g_array_remove_index (intervals, 0);
 g_array_prepend_val (intervals, uarray);
 
+	}; // EMPTY INTERVAL LOOP
 	}; // FUNCTION LOOP

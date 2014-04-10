@@ -62,3 +62,33 @@ int main () {
 
     return 0;
     }
+
+extern int getfirstnumber(char * String1)
+    {
+    init_state();
+    InputString1 = String1;
+    yy_scan_string (InputString1);
+    yyparse();
+    optimize();
+    tostring();
+    OutputString1 = g_string_new (tempstring->str);
+    return 0;
+    }
+
+extern int getsecondnumber(char * String2)
+    {
+    init_state();
+    InputString2 = String2;
+    yy_scan_string (InputString2);
+    yyparse();
+    optimize();
+    tostring();
+    OutputString2 = g_string_new (tempstring->str);
+    return 0;
+    }
+
+extern int compare()
+    {
+    if (g_strcmp0(OutputString1->str, OutputString2->str) == 0)
+	{return 0; } else {return 1; }
+    }

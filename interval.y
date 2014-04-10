@@ -19,12 +19,13 @@
 %left MINUS PLUS
 %left MULTIPLY DIVIDE
 %left NEG   /* negation--unary minus */
-%left UNIF /* unification is from left to right */
+%left PERE UNIF /* unification/intersection is from left to right */
 %right POWER        /* exponentiation */
 
 %% /* The grammar follows.  */
 
 intervalloop:      OKRSKOB intervalloop ZKRSKOB				//Do nothing, but do first! (Put on stack)
+                 | intervalloop PERE intervalloop			{ intersectinterval(); };
                  | intervalloop UNIF intervalloop			{ unifyinterval(); };
                  | largeinterval
                  | mediuminterval

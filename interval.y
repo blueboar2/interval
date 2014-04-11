@@ -18,18 +18,20 @@
 %token NUM
 %left MINUS PLUS
 %left MULTIPLY DIVIDE
-%left NEG   /* negation--unary minus */
-%left PERE UNIF /* unification/intersection is from left to right */
-%right POWER        /* exponentiation */
+%right POWER        	/* exponentiation */
+%left NEG   		/* negation--unary minus */
+%left UNIF 		/* unification is from left to right */
+%left PERE		/* intersection is from left to right and has more priority than unification */
 
 %% /* The grammar follows.  */
 
 intervalloop:      OKRSKOB intervalloop ZKRSKOB				//Do nothing, but do first! (Put on stack)
                  | intervalloop PERE intervalloop			{ intersectinterval(); };
-                 | intervalloop UNIF intervalloop			{ unifyinterval(); };
-                 | largeinterval
+		 | intervalloop UNIF intervalloop			{ unifyinterval(); };
+		 | largeinterval
                  | mediuminterval
                  | smallinterval
+
 
 largeinterval:     kvskob bexp TOZA bexp kvskob {
 				mpz_init (&temp1.left);

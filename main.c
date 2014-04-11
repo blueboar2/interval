@@ -63,7 +63,7 @@ int main () {
     return 0;
     }
 
-extern int getfirstnumber(char * String1)
+extern int getfirststring(char * String1)
     {
     init_state();
     InputString1 = String1;
@@ -75,7 +75,7 @@ extern int getfirstnumber(char * String1)
     return 0;
     }
 
-extern int getsecondnumber(char * String2)
+extern int getsecondstring(char * String2)
     {
     init_state();
     InputString2 = String2;
@@ -90,5 +90,15 @@ extern int getsecondnumber(char * String2)
 extern int compare()
     {
     if (g_strcmp0(OutputString1->str, OutputString2->str) == 0)
-	{return 0; } else {return 1; }
+	{return 1; } else {return 0; }
     }
+
+extern void outputfirstinterval()
+	{
+	printf ("Calculated first string: %s\n", OutputString1->str);
+	}
+
+extern void outputsecondinterval()
+	{
+    	printf ("Calculated second string: %s\n", OutputString2->str);
+	}

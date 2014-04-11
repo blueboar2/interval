@@ -9,6 +9,9 @@ clean:
 	rm -rf *.so
 
 interval:	main.o
+	gcc -o interval -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include unify.o intersect.o interval.tab.o lex.yy.o optimize.o tostring.o init.o main.o -lmpfr -lgmp -lfl -lm -lglib-2.0
+
+interval_shared:	main.o
 	gcc -shared -o interval.so -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include unify.o intersect.o interval.tab.o lex.yy.o optimize.o tostring.o init.o main.o -lmpfr -lgmp -lfl -lm -lglib-2.0
 
 main.o:		interval.tab.o lex.yy.o optimize.o tostring.o init.o unify.o intersect.o

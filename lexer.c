@@ -11,16 +11,6 @@
 "U"							{ return UNIF; }
 "^"							{ return PERE; }
 
-
-"++"							{ printf ("cannot parse ++\n");
-							  exit(4); }
-"+-"							{ printf ("cannot parse +-\n");
-							  exit(4); }
-"-+"							{ printf ("cannot parse -+\n");
-							  exit(4); }
-"--"							{ printf ("cannot parse --\n");
-							  exit(4); }
-
 "<="							{ return LESSEQUAL; }
 ">="							{ return GREATEREQUAL; }
 "<"							{ return LESS; }

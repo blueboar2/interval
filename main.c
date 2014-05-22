@@ -32,23 +32,41 @@ char* inputString (unsigned int realloc_size)
 
 int main () {
     char *str_divided;
+    int retval = 1;
 
+    while (retval != 0)
+    {
     init_state();
     puts ("Input first string");
     InputString1 = inputString(10);
     yy_scan_string (InputString1);
-    yyparse();
+    retval = yyparse();
+    if (retval == 0)
+    {
     optimize();
     tostring();
     OutputString1 = g_string_new (tempstring->str);
+    }
+    else {printf ("Error! Code=%i\n", retval); };
+    }
+
+    retval = 1;
+
+    while (retval != 0)
+    {
     init_state();
     puts ("Input second string");
     InputString2 = inputString(10);
     yy_scan_string (InputString2);
-    yyparse();
+    retval = yyparse();
+    if (retval == 0)
+    {
     optimize();
     tostring();
     OutputString2 = g_string_new (tempstring->str);
+    }
+    else {printf ("Error! Code=%i\n", retval); };
+    }
 
     printf ("Calculated first string: %s\n", OutputString1->str);
     printf ("Calculated second string: %s\n", OutputString2->str);
@@ -68,11 +86,14 @@ extern int getfirststring(char * String1)
     init_state();
     InputString1 = String1;
     yy_scan_string (InputString1);
-    yyparse();
+    int retval = yyparse();
+    if (retval == 0) {
     optimize();
     tostring();
     OutputString1 = g_string_new (tempstring->str);
     return 0;
+    }
+	else {return retval;};
     }
 
 extern int getsecondstring(char * String2)
@@ -80,11 +101,14 @@ extern int getsecondstring(char * String2)
     init_state();
     InputString2 = String2;
     yy_scan_string (InputString2);
-    yyparse();
+    int retval = yyparse();
+    if (retval == 0) {
     optimize();
     tostring();
     OutputString2 = g_string_new (tempstring->str);
     return 0;
+    }
+	else {return retval;};
     }
 
 extern int compare()
